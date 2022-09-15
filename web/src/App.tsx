@@ -1,100 +1,50 @@
-import { MagnifyingGlassPlus } from "phosphor-react";
+import { GameCard } from "./components/GameCard";
+import { PublishAdBanner } from "./components/PublishAdBanner";
+import { useGames } from "./hooks/use-games";
+import { Form } from "./components/Form";
+import * as Dialog from "@radix-ui/react-dialog";
 
 export function App() {
-  return (
-    <div className="max-w-[1120px] my-20 mx-auto px-2 flex flex-col items-center">
-      <img src="/logo.svg" alt="" />
+  const { data: games } = useGames();
 
-      <h1 className="mt-20 text-3xl font-black text-white sm:text-5xl">
-        Seu
+  return (
+    <div className="max-w-[1120px] py-20 mx-auto px-2 flex flex-col items-center">
+      <h1 className="text-3xl font-black text-white sm:text-5xl">
+        Seu {""}
         <span className="text-transparent bg-clip-text bg-nlw-gradient">
-          {" "}
-          duo{" "}
-        </span>
+          duo
+        </span>{" "}
         está aqui.
       </h1>
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-6 gap-6 mt-16">
-        <a href="#" className="relative rounded-lg overflow-hidden">
-          <img src="/game.png" alt="" />
-
-          <div className="w-full pt-16 pb-4 px-4 absolute bottom-0 left-0 right-0 bg-game-card-gradient">
-            <strong className="text-white font-bold block">
-              Dragon Ball Z
-            </strong>
-            <span className="text-sm text-zinc-300 block">60 anúncios</span>
-          </div>
-        </a>
-        <a href="#" className="relative rounded-lg overflow-hidden">
-          <img src="/game.png" alt="" />
-
-          <div className="w-full pt-16 pb-4 px-4 absolute bottom-0 left-0 right-0 bg-game-card-gradient">
-            <strong className="text-white font-bold block">
-              Dragon Ball Z
-            </strong>
-            <span className="text-sm text-zinc-300 block">60 anúncios</span>
-          </div>
-        </a>{" "}
-        <a href="#" className="relative rounded-lg overflow-hidden">
-          <img src="/game.png" alt="" />
-
-          <div className="w-full pt-16 pb-4 px-4 absolute bottom-0 left-0 right-0 bg-game-card-gradient">
-            <strong className="text-white font-bold block">
-              Dragon Ball Z
-            </strong>
-            <span className="text-sm text-zinc-300 block">60 anúncios</span>
-          </div>
-        </a>{" "}
-        <a href="#" className="relative rounded-lg overflow-hidden">
-          <img src="/game.png" alt="" />
-
-          <div className="w-full pt-16 pb-4 px-4 absolute bottom-0 left-0 right-0 bg-game-card-gradient">
-            <strong className="text-white font-bold block">
-              Dragon Ball Z
-            </strong>
-            <span className="text-sm text-zinc-300 block">60 anúncios</span>
-          </div>
-        </a>{" "}
-        <a href="#" className="relative rounded-lg overflow-hidden">
-          <img src="/game.png" alt="" />
-
-          <div className="w-full pt-16 pb-4 px-4 absolute bottom-0 left-0 right-0 bg-game-card-gradient">
-            <strong className="text-white font-bold block">
-              Dragon Ball Z
-            </strong>
-            <span className="text-sm text-zinc-300 block">60 anúncios</span>
-          </div>
-        </a>{" "}
-        <a href="#" className="relative rounded-lg overflow-hidden">
-          <img src="/game.png" alt="" />
-
-          <div className="w-full pt-16 pb-4 px-4 absolute bottom-0 left-0 right-0 bg-game-card-gradient">
-            <strong className="text-white font-bold block">
-              Dragon Ball Z
-            </strong>
-            <span className="text-sm text-zinc-300 block">60 anúncios</span>
-          </div>
-        </a>
+        {games?.map((game) => {
+          return (
+            <GameCard
+              key={game.id}
+              bannerUrl={game.bannerUrl}
+              title={game.title}
+              adsQuantity={game._count.ads}
+            />
+          );
+        })}
       </div>
 
-      <div className="mt-8 mb-4 pt-1 bg-nlw-gradient self-stretch rounded-lg overflow-hidden">
-        <div className="px-8 py-6 bg-[#2A2634] flex flex-col sm:flex-row sm:justify-between items-center">
-          <div className="flex text-center flex-col sm:text-left">
-            <strong className="text-lg sm:text-2xl text-white font-black block">
-              Não encontrou seu duo?
-            </strong>
+      <Dialog.Root>
+        <PublishAdBanner />
 
-            <p className="text-zinc-400 block text-sm sm:text-base">
-              Publique um anúncio para econtrar novos players
-            </p>
-          </div>
+        <Dialog.Portal>
+          <Dialog.Overlay className="bg-black/60 inset-0 fixed" />
 
-          <button className="mt-4 py-3 px-4 flex items-center gap-3 text-white bg-violet-500 font-medium rounded-md hover:bg-violet-600 transition-colors">
-            <MagnifyingGlassPlus size={24} />
-            Publicar anúncio
-          </button>
-        </div>
-      </div>
+          <Dialog.Content className="w-[480px] fixed bg-[#2a2634] shadow-lg py-8 px-10 text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg">
+            <Dialog.Title className="text-[32px] text-white font-black">
+              Publique um anúncio
+            </Dialog.Title>
+
+            <Form />
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
     </div>
   );
 }
